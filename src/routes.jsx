@@ -17,6 +17,7 @@ import Page404 from './pages/Page404';
 import RegisterPage from './pages/RegisterPage';
 import PostPage from './pages/UserPages/PostPage';
 import Modal from './pages/UserPages/CreatePostModal';
+import PostsFullPage from './pages/PostFullPage/PostsFullPage';
 // ----------------------------------------------------------------------
 
 export default function Router() {
@@ -46,11 +47,13 @@ export default function Router() {
       path: '/dashboard',
       element: <DashboardLayout />,
       children: [
-        { element: <ProtectedRoute role={"Admin"}><Navigate to="/dashboard/app" /></ProtectedRoute>},
+        { element: <ProtectedRoute role={"Admin"}><Navigate to="/dashboard/app" /></ProtectedRoute>, index: true},
         { path: 'app', element: <ProtectedRoute role={"Admin"}><DashboardAppPage /></ProtectedRoute> },
         { path: 'user', element: <ProtectedRoute role={"Admin"}><UserPage /></ProtectedRoute> },
         { path: 'products', element: <ProtectedRoute role={"Admin"}><ProductsPage /></ProtectedRoute> },
         { path: 'blog', element: <ProtectedRoute role={"Admin"}><BlogPage /></ProtectedRoute> },
+        { path: 'posts', element: <ProtectedRoute role={"Admin"}><PostPage /></ProtectedRoute> },
+        { path: 'posts/view:id', element: <ProtectedRoute role={"Admin"}><PostsFullPage /></ProtectedRoute> },
       ],
     },
     {
@@ -62,6 +65,7 @@ export default function Router() {
         { path: 'user', element: <ProtectedRoute role={"User"}><UserPage /></ProtectedRoute> },
         { path: 'products', element: <ProtectedRoute role={"User"}><ProductsPage /></ProtectedRoute> },
         { path: 'posts', element: <ProtectedRoute role={"User"}><PostPage /></ProtectedRoute> },
+        { path: 'posts/view/:id', element: <ProtectedRoute role={"User"}><PostsFullPage /></ProtectedRoute> },
         { path: 'modal', element: <ProtectedRoute role={"User"}><Modal /></ProtectedRoute> },
       ],
     },

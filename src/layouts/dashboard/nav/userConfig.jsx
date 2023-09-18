@@ -8,7 +8,7 @@ const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ 
 const userConfig = [
   {
     title: 'dashboard',
-    path: '/client/app',
+    path: '/client/posts',
     icon: icon('ic_analytics'),
   },
   {

@@ -99,7 +99,7 @@ export default function RegisterPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Brgy San Juan Health Center
+              Farmers and Fisher
             </Typography>
             <img src="/assets/illustrations/patient_info.svg" alt="login" />
           </StyledSection>

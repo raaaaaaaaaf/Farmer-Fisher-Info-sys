@@ -10,6 +10,8 @@ import { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebaseConfig';
 import { query, collection, getDocs, doc } from 'firebase/firestore'
 import Modal from './CreatePostModal';
+import _ from 'lodash';
+import { Link } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 const SORT_OPTIONS = [
@@ -44,6 +46,7 @@ export default function PostPage() {
     }
     fetchData()
   }, [])
+  const sortedDocData = _.sortBy(posts, (data) => data.createdAt.seconds).reverse();
   return (
     <>
       <Helmet>
@@ -68,9 +71,9 @@ export default function PostPage() {
           <BlogPostsSearch posts={posts} />
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
-      {posts !== null ? (
+      {sortedDocData !== null ? (
           <Grid container spacing={3}>
-          {posts.map((post, index) => (
+          {sortedDocData.map((post, index) => (
             <BlogPostCard key={post.id} post={post} index={index} />
           ))}
         </Grid>

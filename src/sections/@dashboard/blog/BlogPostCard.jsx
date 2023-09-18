@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
+import { Box, Card, Grid, Avatar, Typography, CardContent, Button } from '@mui/material';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import SvgColor from '../../../components/svg-color';
 import Iconify from '../../../components/iconify';
-
+import { Link } from 'react-router-dom';
 // ----------------------------------------------------------------------
 
 const StyledCardMedia = styled('div')({
@@ -57,7 +57,7 @@ BlogPostCard.propTypes = {
 };
 
 export default function BlogPostCard({ post, index }) {
-  const {title, author, createdAt, description, photoURL} = post;
+  const {title, author, createdAt, image, photoURL, id} = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
 
@@ -69,6 +69,7 @@ export default function BlogPostCard({ post, index }) {
 
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
+      <Link to={`view/${id}`} style={{ textDecoration: 'none', color: 'black'}}>
       <Card sx={{ position: 'relative' }}>
         <StyledCardMedia
           sx={{
@@ -118,7 +119,7 @@ export default function BlogPostCard({ post, index }) {
             }}
           />
           
-          <StyledCover alt={title} src={`/assets/images/covers/cover_${index + 1}.jpg`} />
+          <StyledCover alt={title} src={image ?? `/assets/images/covers/cover_${index + 1}.jpg`} />
         </StyledCardMedia>
 
         <CardContent
@@ -169,6 +170,10 @@ export default function BlogPostCard({ post, index }) {
           </StyledInfo>
         </CardContent>
       </Card>
+      </Link>
+
+      
+
     </Grid>
   );
 }

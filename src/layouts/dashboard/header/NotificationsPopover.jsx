@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { set, sub } from 'date-fns';
 import { noCase } from 'change-case';
 import { faker } from '@faker-js/faker';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 // @mui
 import {
   Box,
@@ -25,13 +25,16 @@ import { fToNow } from '../../../utils/formatTime';
 // components
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
-import { collection, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { db } from '../../../firebase/firebaseConfig';
 import _ from 'lodash';
+import { AuthContext } from '../../../context/AuthContext';
+import { Link } from 'react-router-dom';
 // ---------------------------------------------------------------------
 
 export default function NotificationsPopover() {
   const [notifications, setNotifications] = useState([]);
+  const {currentUser} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,6 +63,14 @@ export default function NotificationsPopover() {
 
   const [open, setOpen] = useState(null);
 
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false)
+    }, 2000)
+  }, [])
+
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
@@ -68,25 +79,16 @@ export default function NotificationsPopover() {
     setOpen(null);
   };
 
-  const handleMarkAllAsRead = async () => {
-    // Update Firestore to mark all notifications as read
-    const batch = db.batch();
-
-    notifications.forEach((notification) => {
-      const notificationRef = db.collection('notifications').doc(notification.id);
-      batch.update(notificationRef, { isUnRead: false });
-    });
-
-    try {
-      await batch.commit();
-      // Update the local state to reflect the changes
-      setNotifications((prevNotifications) =>
-        prevNotifications.map((notification) => ({ ...notification, isUnRead: false }))
-      );
-    } catch (error) {
-      console.error('Error marking notifications as read:', error);
-    }
+  const handleMarkAllAsRead = () => {
+    setNotifications(
+      notifications.map((notification) => ({
+        ...notification,
+        isUnRead: false,
+      }))
+    );
   };
+
+
   return (
     <>
       <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
@@ -127,7 +129,9 @@ export default function NotificationsPopover() {
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
-
+      {loading ? (
+        <div>...</div>
+      ) : (
         <Scrollbar sx={{ height: { xs: 340, sm: 'auto' } }}>
           <List
             disablePadding
@@ -137,8 +141,8 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {sortedDocData.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {sortedDocData.slice(0, 2).map((notification, index) => (
+              <NotificationItem key={notification.id} notification={notification} index={index}/>
             ))}
           </List>
 
@@ -150,11 +154,13 @@ export default function NotificationsPopover() {
               </ListSubheader>
             }
           >
-            {sortedDocData.slice(2, 5).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {sortedDocData.slice(2, 5).map((notification, index) => (
+              <NotificationItem key={notification.id} notification={notification} index={index}/>
             ))}
           </List>
         </Scrollbar>
+      )}
+
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
@@ -179,13 +185,25 @@ NotificationItem.propTypes = {
     description: PropTypes.string,
     photoURL: PropTypes.any,
   }),
+  index: PropTypes.number,
 };
 
 function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
-
+  const { avatar, title, postDataID } = renderContent(notification);
+  const setIsUnRead = async (id) => {
+    try {
+      const notifRef = doc(db, "notification", id)
+      await updateDoc(notifRef, {
+        isUnRead: false
+      })
+    } catch(err) {
+      console.error(err);
+    }
+  }
   return (
-    <ListItemButton
+    <Link to={`posts/view/${postDataID}`} style={{ textDecoration: 'none', color: 'black'}}>
+        <ListItemButton
+    onClick={() => setIsUnRead(notification.id)}
       sx={{
         py: 1.5,
         px: 2.5,
@@ -220,12 +238,14 @@ function NotificationItem({ notification }) {
         }
       />
     </ListItemButton>
+    </Link>
+
   );
 }
 
 // ----------------------------------------------------------------------
 
-function renderContent(notification) {
+function renderContent(notification, index) {
   const title = (
     <Typography variant="subtitle2">
       {notification.author}
@@ -236,10 +256,11 @@ function renderContent(notification) {
       )}
     </Typography>
   );
-
+  const postDataID = notification.postDataID
+ 
   return {
-    avatar: notification.photoURL ? <img alt={notification.author} src={notification.photoURL} /> : null,
-    title,
+    avatar: notification.photoURL ? <img alt={notification.author} src={notification.photoURL} /> : <img alt={notification.author} src={ "/assets/images/avatars/avatar_2.jpg "}/>,
+    title, postDataID,
   };
 }
 

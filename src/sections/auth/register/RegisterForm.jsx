@@ -53,7 +53,7 @@ export default function RegisterForm() {
          label="Full Name"
          onChange={(e) => setName(e.target.value)} 
          />
-
+         
         <TextField
          name="email" 
          label="Email address"
