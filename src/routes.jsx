@@ -11,7 +11,6 @@ import DashboardAppPage from './pages/AdminPages/DashboardAppPage';
 import UserPage from './pages/AdminPages/UserPage';
 import ProductsPage from './pages/AdminPages/ProductsPage';
 import BlogPage from './pages/AdminPages/BlogPage';
-import UserDashboardAppPage from './pages/UserPages/UserDashboardAppPage';
 import LoginPage from './pages/LoginPage';
 import Page404 from './pages/Page404';
 import RegisterPage from './pages/RegisterPage';
@@ -64,9 +63,7 @@ export default function Router() {
       element: <DashboardLayout />,
       children: [
         { element: <ProtectedRoute role={"User"}><Navigate to="/client/posts" /></ProtectedRoute>, index: true},
-        { path: 'app', element: <ProtectedRoute role={"User"}><UserDashboardAppPage /></ProtectedRoute> },
-        { path: 'user', element: <ProtectedRoute role={"User"}><UserPage /></ProtectedRoute> },
-        { path: 'products', element: <ProtectedRoute role={"User"}><ProductsPage /></ProtectedRoute> },
+        { path: 'weather', element: <ProtectedRoute role={"User"}><WeatherApp /></ProtectedRoute> },
         { path: 'posts', element: <ProtectedRoute role={"User"}><UserPostPage /></ProtectedRoute> },
         { path: 'posts/view/:id', element: <ProtectedRoute role={"User"}><PostsFullPage /></ProtectedRoute> },
         { path: 'modal', element: <ProtectedRoute role={"User"}><Modal /></ProtectedRoute> },

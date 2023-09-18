@@ -10,6 +10,7 @@ import { AuthContext } from '../../../context/AuthContext';
 import Loading from '../../../components/loading/Loading';
 import { auth } from '../../../firebase/firebaseConfig';
 import avtPhoto from '../../../assets/avatar_default.jpg'
+import EditProfileModal from '../../../pages/EditProfileModal';
 // ----------------------------------------------------------------------
 
 
@@ -25,6 +26,7 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
   const {currentUser, userData, loading} = useContext(AuthContext);
+  const [isModalOpen, setModalOpen] = useState(false);
   const nav = useNavigate();
 
   const handleOpen = (event) => {
@@ -105,10 +107,16 @@ export default function AccountPopover() {
              Home
             </MenuItem>
           </Link>
-
+            <MenuItem onClick={() => setModalOpen(true)}>
+             Edit Profile
+            </MenuItem>
+            <EditProfileModal
+              open={isModalOpen}
+              onClose={() => setModalOpen(false)}
+            />
         </Stack>
 
-
+        <Divider/>
         <MenuItem onClick={logout} sx={{ m: 1 }}>
           Logout
         </MenuItem>

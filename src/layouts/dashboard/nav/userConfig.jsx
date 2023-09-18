@@ -1,4 +1,5 @@
 // component
+import Iconify from '../../../components/iconify';
 import SvgColor from '../../../components/svg-color';
 
 // ----------------------------------------------------------------------
@@ -7,25 +8,16 @@ const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ 
 
 const userConfig = [
   {
-    title: 'dashboard',
+    title: 'Home',
     path: '/client/posts',
-    icon: icon('ic_analytics'),
+    icon: <Iconify icon={'carbon:blog'}/>,
   },
   {
-    title: 'user',
-    path: '/client/user',
-    icon: icon('ic_user'),
+    title: 'Weather',
+    path: '/client/weather',
+    icon: <Iconify icon={'material-symbols:weather-mix-outline'}/>,
   },
-  {
-    title: 'product',
-    path: '/client/products',
-    icon: icon('ic_cart'),
-  },
-  {
-    title: 'blog',
-    path: '/client/blog',
-    icon: icon('ic_blog'),
-  },
+
 
 ];
 

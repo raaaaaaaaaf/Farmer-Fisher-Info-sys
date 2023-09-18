@@ -1,14 +1,15 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Card, Grid, Avatar, Typography, CardContent, Button } from '@mui/material';
+import { Box, Card, Grid, Avatar, Typography, CardContent, Link } from '@mui/material';
 // utils
 import { fDateTime } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
 //
 import SvgColor from '../../../components/svg-color';
 import Iconify from '../../../components/iconify';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 // ----------------------------------------------------------------------
 
 const StyledCardMedia = styled('div')({
@@ -60,7 +61,11 @@ export default function BlogPostCard({ post, index }) {
   const {title, author, createdAt, image, photoURL, id} = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
+  const nav = useNavigate();
 
+  const navigateToPost = () => {
+    nav(`view/${id}`)
+  }
   // const POST_INFO = [
   //   { number: comment, icon: 'eva:message-circle-fill' },
   //   { number: view, icon: 'eva:eye-fill' },
@@ -69,7 +74,7 @@ export default function BlogPostCard({ post, index }) {
 
   return (
     <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
-      <Link to={`view/${id}`} style={{ textDecoration: 'none', color: 'black'}}>
+      <Link onClick={navigateToPost} color="inherit" variant="subtitle2" underline="hover" noWrap>
       <Card sx={{ position: 'relative' }}>
         <StyledCardMedia
           sx={{

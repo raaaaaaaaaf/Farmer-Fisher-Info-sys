@@ -257,7 +257,7 @@ export default function UserPage() {
                               >
                                 <Avatar
                                   alt={user.displayName}
-                                  src={`/assets/images/avatars/avatar_${
+                                  src={user.photoURL ?? `/assets/images/avatars/avatar_${
                                     index + 1
                                   }.jpg`}
                                 />

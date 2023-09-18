@@ -1,41 +1,33 @@
 // component
 import SvgColor from '../../../components/svg-color';
+import Iconify from '../../../components/iconify'
 
 // ----------------------------------------------------------------------
 
-const icon = (name) => <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />;
 
 const adminConfig = [
   {
     title: 'dashboard',
     path: '/dashboard/app',
-    icon: icon('ic_analytics'),
+    icon: <Iconify icon={'carbon:analytics'}/>,
   },
   {
     title: 'user',
     path: '/dashboard/user',
-    icon: icon('ic_user'),
-  },
-  {
-    title: 'Weather',
-    path: '/dashboard/weather',
-    icon: icon('ic_cart'),
+    icon: <Iconify icon={'mdi:users-outline'}/>,
   },
   {
     title: 'Posts',
     path: '/dashboard/posts',
-    icon: icon('ic_blog'),
+    icon: <Iconify icon={'carbon:blog'}/>,
   },
   {
-    title: 'login',
-    path: '/login',
-    icon: icon('ic_lock'),
+    title: 'Weather',
+    path: '/dashboard/weather',
+    icon: <Iconify icon={'material-symbols:weather-mix-outline'}/>,
   },
-  {
-    title: 'Not found',
-    path: '/404',
-    icon: icon('ic_disabled'),
-  },
+
+
 ];
 
 export default adminConfig;

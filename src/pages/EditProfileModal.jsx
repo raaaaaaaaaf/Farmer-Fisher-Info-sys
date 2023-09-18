@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -7,34 +7,21 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  Input,
+  InputAdornment,
 } from "@mui/material";
-import { AddFormContext } from "../context/AddContext";
-import { AuthContext } from "../context/AuthContext";
-import {
-  addDoc,
-  collection,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
-import { db, storage } from "../firebase/firebaseConfig";
+import { updateProfile } from "firebase/auth";
+import { auth, db, storage } from "../firebase/firebaseConfig";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
-const Modal = ({ open, onClose }) => {
+import { doc, setDoc, updateDoc } from "firebase/firestore";
+
+
+function EditProfileModal({ open, onClose }) {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    content: "",
+    name: "",
     coverImage: null,
   });
-
-  const { currentUser, userData } = useContext(AuthContext);
-
-  const nav = useNavigate();
-
-  const postRef = collection(db, "postData");
-
-  const notifRef = collection(db, "notification");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -53,14 +40,14 @@ const Modal = ({ open, onClose }) => {
     });
   };
 
-  const addPost = async () => {
+  const handleSave = async () => {
     try {
       const metadata = {
         contentType: "image/jpeg",
       };
 
       // Upload file and metadata to the object 'images/mountains.jpg'
-      const storageRef = ref(storage, "coverImage/" + formData.title);
+      const storageRef = ref(storage, "profileImage/" + formData.name);
       const uploadTask = uploadBytesResumable(
         storageRef,
         formData.coverImage,
@@ -106,77 +93,41 @@ const Modal = ({ open, onClose }) => {
           // Upload completed successfully, now we can get the download URL
           getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
             // Create a new post document in Firestore.
-            const postData = {
-              author: userData.displayName,
-              description: formData.description,
-              content: formData.content,
-              title: formData.title,
-              photoURL: currentUser.photoURL,
-              uid: currentUser.uid,
-              image: downloadURL,
-              createdAt: serverTimestamp(),
-            };
-
-            const postDocRef = await addDoc(postRef, postData);
-            // Create a notification document in Firestore.
-            const notificationData = {
-              author: userData.displayName,
-              title: formData.title,
-              description: "has just posted something new. Check it out now!",
-              photoURL: currentUser.photoURL,
-              isUnRead: true,
-              uid: currentUser.uid,
-              postDataID: postDocRef.id,
-              createdAt: serverTimestamp(),
-            };
-            await addDoc(notifRef, notificationData);
+            await updateProfile(auth.currentUser, {
+              displayName: formData.name,
+              photoURL: downloadURL,
+            })
+            const userRef = doc(db, "users", auth.currentUser.uid)
+            await updateDoc(userRef, {
+              displayName: formData.name,
+              photoURL: downloadURL,
+            })
           });
         }
       );
       // Show a success notification.
-      Swal.fire("Post Created!", "Post Created Successfully.", "success");
+      Swal.fire("Profile Edited!", "Post Created Successfully.", "success");
       onClose();
-      nav("/client/posts");
     } catch (err) {
-      Swal.fire("Error", "An error occurred while creating the post.", "error");
+      Swal.fire("Error", "An error occurred while editing profile.", "error");
       console.error(err);
     }
   };
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Create a New Post</DialogTitle>
+      <DialogTitle>Edit Profile</DialogTitle>
       <DialogContent>
+        <DialogContentText>Update your profile information:</DialogContentText>
         <TextField
           autoFocus
           margin="dense"
-          name="title"
-          label="Title"
+          id="name"
+          name="name"
+          label="Name"
           type="text"
           fullWidth
-          value={formData.title}
-          onChange={handleInputChange}
-        />
-        <TextField
-          margin="dense"
-          name="description"
-          label="Description"
-          type="text"
-          fullWidth
-          multiline
-          rows={4}
-          value={formData.description}
-          onChange={handleInputChange}
-        />
-        <TextField
-          margin="dense"
-          name="content"
-          label="Content"
-          type="text"
-          fullWidth
-          multiline
-          rows={8}
-          value={formData.content}
+          value={formData.name}
           onChange={handleInputChange}
         />
         <input
@@ -189,7 +140,7 @@ const Modal = ({ open, onClose }) => {
         />
         <label htmlFor="cover-image-input">
           <Button variant="contained" component="span">
-            Upload Cover Image
+            Upload Image
           </Button>
         </label>
         {formData.coverImage && (
@@ -202,12 +153,12 @@ const Modal = ({ open, onClose }) => {
         <Button onClick={onClose} color="primary">
           Cancel
         </Button>
-        <Button onClick={addPost} variant="contained">
-          Create
+        <Button onClick={handleSave} color="primary">
+          Save
         </Button>
       </DialogActions>
     </Dialog>
   );
-};
+}
 
-export default Modal;
+export default EditProfileModal;

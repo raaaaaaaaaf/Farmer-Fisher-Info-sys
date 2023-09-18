@@ -1,12 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Search from "../components/search/Search";
 import Weather from "../components/weather/Weather";
 import { API_URL, API_KEY } from "../components/weather/api";
 import Forecast from "../components/forecast/Forecast";
+import { Helmet } from "react-helmet-async";
+import Loading from "../components/loading/Loading";
 
 const WeatherApp = () => {
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+  }, []);
+
   const handleOnSearchChange = async (searchData) => {
     try {
       const [lat, lon] = searchData.value.split(" ");
@@ -28,13 +39,23 @@ const WeatherApp = () => {
       console.error(err);
     }
   };
-  console.log(weather);
-  console.log(forecast);
   return (
     <div className="container">
-      <Search onSearchChange={handleOnSearchChange} />
-      {weather && <Weather data={weather} />}
-      {forecast && <Forecast data={forecast}/>}
+      <Helmet>
+        <title>
+          Weather App | Local Farmers and Fisher folks web-based information
+          system
+        </title>
+      </Helmet>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <Search onSearchChange={handleOnSearchChange} />
+          {weather && <Weather data={weather} />}
+          {forecast && <Forecast data={forecast} />}
+        </>
+      )}
     </div>
   );
 };

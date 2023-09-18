@@ -15,7 +15,6 @@ export const AuthContextProvider = ({ children }) => {
     // Subscribe to authentication state changes
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setCurrentUser(user);
-      console.log(user);
 
       // If a user is authenticated, fetch user data
       if (user) {
@@ -25,7 +24,6 @@ export const AuthContextProvider = ({ children }) => {
 
           if (userSnap.exists()) {
             setUserData(userSnap.data());
-            console.log("Document data:", userSnap.data());
           } else {
             console.log("User document does not exist");
           }
