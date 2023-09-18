@@ -9,7 +9,7 @@ import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../sections/@da
 import { useEffect, useState } from 'react';
 import { db } from '../../firebase/firebaseConfig';
 import { query, collection, getDocs, doc } from 'firebase/firestore'
-import Modal from './CreatePostModal';
+import Modal from '../CreatePostModal';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 // ----------------------------------------------------------------------
@@ -22,7 +22,7 @@ const SORT_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function PostPage() {
+export default function AdminPostPage() {
   const [posts, setPosts] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   useEffect(() => {
@@ -50,13 +50,13 @@ export default function PostPage() {
   return (
     <>
       <Helmet>
-        <title> Client: Blog | Minimal UI </title>
+        <title> Admin: Post | Minimal UI </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Client
+            Admin
           </Typography>
           <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={() => setModalOpen(true)}>
             New Post

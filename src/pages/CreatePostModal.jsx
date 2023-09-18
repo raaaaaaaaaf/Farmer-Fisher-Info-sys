@@ -8,10 +8,10 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import { AddFormContext } from '../../context/AddContext';
-import { AuthContext } from '../../context/AuthContext'
+import { AddFormContext } from '../context/AddContext';
+import { AuthContext } from '../context/AuthContext'
 import { addDoc, collection, serverTimestamp, setDoc } from 'firebase/firestore'
-import { db, storage } from '../../firebase/firebaseConfig'
+import { db, storage } from '../firebase/firebaseConfig'
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';

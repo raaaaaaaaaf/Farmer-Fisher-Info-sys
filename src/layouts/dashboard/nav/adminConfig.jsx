@@ -17,13 +17,13 @@ const adminConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'product',
-    path: '/dashboard/products',
+    title: 'Weather',
+    path: '/dashboard/weather',
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/dashboard/blog',
+    title: 'Posts',
+    path: '/dashboard/posts',
     icon: icon('ic_blog'),
   },
   {
