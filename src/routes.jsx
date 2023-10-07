@@ -25,9 +25,26 @@ export default function Router() {
 
   const ProtectedRoute = ({children, role}) => {
     const {currentUser, userData, loading} = useContext(AuthContext);
-
+    const [timedOut, setTimedOut] = useState(false);
+  
+    useEffect(() => {
+      // Set a timeout to consider the loading taking too long
+      const timeoutId = setTimeout(() => {
+        setTimedOut(true);
+      }, 2000); // 5 seconds timeout (adjust as needed)
+  
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }, []);
+  
     if (loading) {
-      return <Loading/>
+      if (timedOut) {
+        // Redirect to login page if loading takes too long
+        return <Navigate to="/login" replace />;
+      } else {
+        return <Loading/>
+      }
     }
     if (!currentUser) {
       return <Navigate to={'/login'} replace/>
@@ -44,6 +61,20 @@ export default function Router() {
 
 
   const routes = useRoutes([
+    {
+      path: 'login',
+      element: <LoginPage />,
+    },
+
+    {
+      path: 'register',
+      element: <RegisterPage />,
+    },
+    {
+      path: '/',
+      // Redirect to the login page when accessing the root URL
+      element: <Navigate to="/login" replace />,
+    },
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -68,14 +99,6 @@ export default function Router() {
         { path: 'posts/view/:id', element: <ProtectedRoute role={"User"}><PostsFullPage /></ProtectedRoute> },
         { path: 'modal', element: <ProtectedRoute role={"User"}><Modal /></ProtectedRoute> },
       ],
-    },
-    {
-      path: 'login',
-      element: <LoginPage />,
-    },
-    {
-      path: 'register',
-      element: <RegisterPage />,
     },
     {
       element: <SimpleLayout />,
