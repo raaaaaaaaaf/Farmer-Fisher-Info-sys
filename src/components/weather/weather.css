@@ -54,3 +54,46 @@
     font-weight: 600;
     font-size: 12px;
 }
+
+/* Responsive styles for screens less than 768px (typical mobile screens) */
+@media (max-width: 768px) {
+    .weather {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #f0f0f0; /* Different background color for mobile */
+        color: #333; /* Different text color for mobile */
+    }
+
+    .city {
+        font-size: 24px; /* Larger font size for mobile */
+        margin: 10px 0;
+    }
+
+    .weather-description {
+        font-size: 18px; /* Larger font size for mobile */
+    }
+
+    .weather-icons {
+        width: 100px; /* Adjusted width for mobile */
+        margin: 10px 0;
+    }
+
+    .temperature {
+        font-size: 60px; /* Smaller font size for mobile */
+        margin: 10px 0;
+    }
+
+    .details {
+        width: 100%;
+        padding-left: 0;
+    }
+
+    .parameter-label,
+    .parameter-value {
+        text-align: center;
+        font-size: 14px; /* Adjusted font size for mobile */
+    }
+}

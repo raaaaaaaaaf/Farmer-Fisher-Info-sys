@@ -17,7 +17,7 @@ function Main({posts}) {
       <Typography variant="body1" className="post-info">
         {fDateTime(new Date(createdAt.seconds * 1000).toLocaleString("en-US"))} by {author}
       </Typography>
-      <Typography variant="body1" className="post-content">
+      <Typography variant="body1" className="post-content" style={{ lineHeight: '1.6', fontSize: '1.1rem', textAlign: 'justify' }}>
         {content}
       </Typography>
     </Grid>
