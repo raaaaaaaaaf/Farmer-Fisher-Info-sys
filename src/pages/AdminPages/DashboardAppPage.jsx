@@ -82,7 +82,7 @@ export default function DashboardAppPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard | Minimal UI </title>
+        <title> Dashboard | Local Farmers and Fisher folks web-based information system </title>
       </Helmet>
       {loading ? (
         <Loading />
@@ -97,6 +97,7 @@ export default function DashboardAppPage() {
               <AppWidgetSummary
                 title="Users"
                 total={userList}
+                color="info"
                 icon={"mdi:users-outline"}
               />
             </Grid>

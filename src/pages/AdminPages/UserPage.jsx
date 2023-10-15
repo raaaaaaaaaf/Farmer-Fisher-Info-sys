@@ -184,7 +184,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> User | Local Farmers and Fisher folks web-based information system </title>
       </Helmet>
 
       <Container>

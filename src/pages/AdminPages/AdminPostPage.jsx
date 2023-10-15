@@ -66,7 +66,7 @@ export default function AdminPostPage() {
   return (
     <>
       <Helmet>
-        <title> Admin: Post | Minimal UI </title>
+        <title> Post | Local Farmers and Fisher folks web-based information system </title>
       </Helmet>
       {loading ? (
         <Loading />
