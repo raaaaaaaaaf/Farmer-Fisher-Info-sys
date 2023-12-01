@@ -300,7 +300,7 @@ export default function UserPage() {
                             <IconButton
                                 size="large"
                                 color="inherit"
-                                onClick={() => deleteProfile(id)}
+                                onClick={() => deleteProfile(user.id)}
                               >
                                 <Iconify
                                   icon={"material-symbols:delete-outline"}
