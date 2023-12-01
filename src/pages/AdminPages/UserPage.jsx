@@ -30,9 +30,10 @@ import Scrollbar from "../../components/scrollbar";
 import { UserListHead, UserListToolbar } from "../../sections/@dashboard/user";
 // mock
 
-import { collection, getDoc, getDocs, doc } from "firebase/firestore";
+import { collection, getDoc, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 import Loading from "../../components/loading/Loading";
+import Swal from "sweetalert2";
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +41,7 @@ const TABLE_HEAD = [
   { id: "name", label: "Name", alignRight: false },
   { id: "email", label: "E-mail", alignRight: false },
   { id: "role", label: "Role", alignRight: false },
+  { id: "act", label: "Action", alignRight: false },
 ];
 
 // ----------------------------------------------------------------------
@@ -118,6 +120,29 @@ export default function UserPage() {
       setLoading(false);
     }, 2000);
   }, []);
+
+  const deleteProfile = async (id) => {
+    try {
+      const userRef = doc(db, "users", id);
+      await deleteDoc(userRef)
+      // Display a success toast
+      Swal.fire({
+        icon: "success",
+        title: "Deleted Successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    } catch (error) {
+      // Handle any errors that may occur during deletion
+      console.error("Error deleting user profile:", error);
+      // Display an error toast or take appropriate action
+      Swal.fire({
+        icon: "error",
+        title: "Something went wrong!",
+        text: "Try Again!",
+      });
+    }
+  };
 
   const handleCloseMenu = () => {
     setOpen(null);
@@ -270,6 +295,18 @@ export default function UserPage() {
                             <TableCell align="left">{user.email}</TableCell>
 
                             <TableCell align="left">{user.role}</TableCell>
+
+                            <TableCell>
+                            <IconButton
+                                size="large"
+                                color="inherit"
+                                onClick={() => deleteProfile(id)}
+                              >
+                                <Iconify
+                                  icon={"material-symbols:delete-outline"}
+                                />
+                              </IconButton>
+                            </TableCell>
                           </TableRow>
                         );
                       })}
